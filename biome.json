@@ -52,7 +52,6 @@
 				"noClassAssign": "error",
 				"noCompareNegZero": "error",
 				"noConfusingLabels": "error",
-				"noConsole": "warn",
 				"noDebugger": "error",
 				"noDuplicateCase": "error",
 				"noDuplicateObjectKeys": "error",
