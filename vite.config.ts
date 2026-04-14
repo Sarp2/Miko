@@ -1,8 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-import { DEV_CLIENT_PORT } from "src/shared/dev-ports";
-import { getDefaultDevServerPort } from "src/shared/dev-ports";
+import { DEV_CLIENT_PORT, getDefaultDevServerPort } from "./src/shared/dev-ports";
 
 function getAllowedHosts() {
 	const defaults = ["localhost", "127.0.0.1", "0.0.0.0"];
