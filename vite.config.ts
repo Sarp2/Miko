@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-import { DEV_CLIENT_PORT, getDefaultDevServerPort } from "./src/shared/dev-ports";
+import { DEFAULT_DEV_CLIENT_PORT, getDefaultDevServerPort } from "./src/shared/dev-ports";
 
 function getAllowedHosts() {
 	const defaults = ["localhost", "127.0.0.1", "0.0.0.0"];
@@ -27,7 +27,7 @@ function getBackendTargetHost() {
 
 function getBackendPort() {
 	const configured = Number(process.env.MIKO_DEV_BACKEND_PORT);
-	return Number.isFinite(configured) && configured > 0 ? configured : getDefaultDevServerPort(DEV_CLIENT_PORT);
+	return Number.isFinite(configured) && configured > 0 ? configured : getDefaultDevServerPort(DEFAULT_DEV_CLIENT_PORT);
 }
 
 const backendTargetHost = getBackendTargetHost();
@@ -37,7 +37,7 @@ export default defineConfig({
 	plugins: [react()],
 	server: {
 		host: '0.0.0.0',
-		port: DEV_CLIENT_PORT,
+		port: DEFAULT_DEV_CLIENT_PORT,
 		strictPort: true,
 		proxy: {
 			'/ws': {
