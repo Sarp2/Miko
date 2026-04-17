@@ -17,10 +17,10 @@ name: CI
         - run: bun install
 
         - name: Format check                                                                        
-          run: bunx biome format --check ./src
+          run: bunx biome format --check
                                                                                                     
         - name: Lint                                                                              
-          run: bunx biome check ./src
+          run: bunx biome check
 
         - name: Typecheck & Build
           run: bun run check
