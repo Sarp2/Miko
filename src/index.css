@@ -56,6 +56,7 @@ body::before {
 	*,
 	::before,
 	::after {
+		/* biome-ignore lint/complexity/noImportantStyles: <> */
 		animation: none !important;
 	}
 }
