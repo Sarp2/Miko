@@ -32,14 +32,14 @@ export async function startServer(options: { port?: number; host?: string } = {}
 		},
 
 		websocket: {
-			open(ws) {
+			open(_ws) {
 				console.log('client connected');
 			},
 			message(ws, message) {
 				// Echo for now — replace with router later
 				ws.send(message);
 			},
-			close(ws) {
+			close(_ws) {
 				console.log('client disconnected');
 			},
 		},
