@@ -4,6 +4,7 @@ import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { TranscriptEntry } from 'src/shared/types';
+import type { SnapshotFile } from './event';
 import { EventStore } from './event-store';
 
 const originalRuntimeProfile = process.env.MIKO_RUNTIME_PROFILE;
@@ -414,7 +415,9 @@ describe('EventStore', () => {
 		expect(await readFile(join(dataDir, 'chats.jsonl'), 'utf-8')).toBe('');
 		expect(await readFile(join(dataDir, 'turns.jsonl'), 'utf-8')).toBe('');
 
-		const snapshot = JSON.parse(await readFile(join(dataDir, 'snapshot.json'), 'utf-8'));
+		const snapshot = JSON.parse(
+			await readFile(join(dataDir, 'snapshot.json'), 'utf-8'),
+		) as SnapshotFile;
 		expect(snapshot.projects.map((candidate) => candidate.id)).toEqual([project.id]);
 		expect(snapshot.chats.map((candidate) => candidate.id)).toEqual([chat.id]);
 		expect(snapshot.chats[0]).toMatchObject({
