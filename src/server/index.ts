@@ -1,5 +1,5 @@
 import path from 'node:path';
-import type { ClientState } from './ws/ws-router';
+import type { ClientState } from './ws-router';
 
 const distDir = path.join(import.meta.dir, '..', '..', 'dist', 'client');
 
