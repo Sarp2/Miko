@@ -9,6 +9,7 @@ import {
 	DiffStore,
 	discardRenamedPath,
 	extractGitHubRepoSlug,
+	fetchGitHubPullRequests,
 	findDirtyPath,
 	getBranchHistory,
 	getMergeCommitCount,
@@ -916,5 +917,23 @@ describe('DiffStore.discardFile in an unborn repo', () => {
 		expect(result.snapshotChanged).toBe(true);
 		expect(await Bun.file(path.join(repoRoot, 'new-file.txt')).exists()).toBe(false);
 		expect(await listDirtyPaths(repoRoot)).toEqual([]);
+	});
+});
+
+describe('fetchGitHubPullRequests', () => {
+	test('returns an empty gh api array without falling back to fetch', async () => {
+		let fetchCalled = false;
+		const fetchImpl: typeof fetch = ((...args: Parameters<typeof fetch>) => {
+			fetchCalled = true;
+			return fetch(...args);
+		}) as typeof fetch;
+
+		const result = await fetchGitHubPullRequests('sarp/miko', {
+			ghApiImpl: async () => [],
+			fetchImpl,
+		});
+
+		expect(result).toEqual([]);
+		expect(fetchCalled).toBe(false);
 	});
 });

@@ -840,9 +840,8 @@ export async function fetchGitHubPullRequests(
 	const ghPath = `repos/${repoSlug}/pulls?state=open&per_page=50`;
 	const ghResponse = await (options.ghApiImpl ?? ghApi)(ghPath);
 
-	const parsedGhResponse = normalizePullRequestsResponse(ghResponse);
-	if (parsedGhResponse.length > 0) {
-		return parsedGhResponse;
+	if (Array.isArray(ghResponse)) {
+		return normalizePullRequestsResponse(ghResponse);
 	}
 
 	const fetchImpl = options.fetchImpl ?? fetch;
