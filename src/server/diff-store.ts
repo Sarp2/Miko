@@ -748,8 +748,12 @@ export async function discardRenamedPath(repoRoot: string, entry: DirtyPathEntry
 }
 
 async function discardAddedPath(repoRoot: string, hasCommit: boolean, relativePath: string) {
-	if (hasCommit) {
-		await runGit(['reset', 'HEAD', '--', relativePath], repoRoot);
+	const result = hasCommit
+		? await runGit(['reset', 'HEAD', '--', relativePath], repoRoot)
+		: await runGit(['rm', '--cached', '--ignore-unmatch', '--', relativePath], repoRoot);
+
+	if (result.exitCode !== 0) {
+		throw new Error(formatGitFailure(result) || 'Failed to unstage added file');
 	}
 }
 

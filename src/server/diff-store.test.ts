@@ -898,3 +898,23 @@ describe('DiffStore.ignoreFile', () => {
 		expect((await listDirtyPaths(repoRoot)).map((entry) => entry.path)).toEqual(['.gitignore']);
 	});
 });
+
+describe('DiffStore.discardFile in an unborn repo', () => {
+	test('fully discards a staged added file before the first commit', async () => {
+		const repoRoot = await createTempDir();
+		await runGit(['init'], repoRoot);
+		await Bun.write(path.join(repoRoot, 'new-file.txt'), 'new\n');
+		await runGit(['add', 'new-file.txt'], repoRoot);
+
+		const store = new DiffStore(repoRoot);
+		const result = await store.discardFile({
+			projectId: 'project-1',
+			projectPath: repoRoot,
+			path: 'new-file.txt',
+		});
+
+		expect(result.snapshotChanged).toBe(true);
+		expect(await Bun.file(path.join(repoRoot, 'new-file.txt')).exists()).toBe(false);
+		expect(await listDirtyPaths(repoRoot)).toEqual([]);
+	});
+});
