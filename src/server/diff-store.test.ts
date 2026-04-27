@@ -898,6 +898,31 @@ describe('DiffStore.ignoreFile', () => {
 		expect(await Bun.file(path.join(repoRoot, '.gitignore')).text()).toBe('debug.log\n');
 		expect((await listDirtyPaths(repoRoot)).map((entry) => entry.path)).toEqual(['.gitignore']);
 	});
+
+	test('does not match sibling paths that share the ignore prefix', async () => {
+		const repoRoot = await createTempDir();
+		await runGit(['init'], repoRoot);
+		await runGit(['config', 'user.email', 'miko@example.com'], repoRoot);
+		await runGit(['config', 'user.name', 'Miko'], repoRoot);
+
+		await Bun.write(path.join(repoRoot, 'base.txt'), 'base\n');
+		await runGit(['add', 'base.txt'], repoRoot);
+		await runGit(['commit', '-m', 'base commit'], repoRoot);
+		await mkdir(path.join(repoRoot, 'foobar'));
+		await Bun.write(path.join(repoRoot, 'foobar', 'baz.txt'), 'baz\n');
+
+		const store = new DiffStore(repoRoot);
+		await expect(
+			store.ignoreFile({
+				projectId: 'project-1',
+				projectPath: repoRoot,
+				path: 'foo',
+			}),
+		).rejects.toThrow('File is no longer changed: foo');
+
+		expect(await Bun.file(path.join(repoRoot, '.gitignore')).exists()).toBe(false);
+		expect((await listDirtyPaths(repoRoot)).map((entry) => entry.path)).toEqual(['foobar/baz.txt']);
+	});
 });
 
 describe('DiffStore.discardFile in an unborn repo', () => {

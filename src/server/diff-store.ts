@@ -1870,10 +1870,11 @@ export class DiffStore {
 			throw new Error('Only untracked files can be ignored from the diff viewer');
 		}
 
+		const ignoreDescendantPrefix = ignoreEntry.endsWith('/') ? ignoreEntry : `${ignoreEntry}/`;
 		const entry = dirtyPaths.find(
 			(candidate) =>
 				candidate.isUntracked &&
-				(candidate.path === ignoreEntry || candidate.path.startsWith(ignoreEntry)),
+				(candidate.path === ignoreEntry || candidate.path.startsWith(ignoreDescendantPrefix)),
 		);
 
 		if (!entry) {
