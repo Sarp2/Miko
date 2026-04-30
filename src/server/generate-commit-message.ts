@@ -42,8 +42,8 @@ export function sanitizeSubject(value: unknown): string | null {
 	const normalized = (value.split(/\r?\n/u)[0] ?? '')
 		.replace(/\s+/g, ' ')
 		.trim()
-		.replace(/[.]+$/u, '')
 		.slice(0, 72)
+		.replace(/[.]+$/u, '')
 		.trim();
 
 	return normalized.length > 0 ? normalized : null;

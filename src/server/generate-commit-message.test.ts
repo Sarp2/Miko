@@ -51,6 +51,10 @@ describe('sanitizeSubject', () => {
 	test('truncates to 72 characters', () => {
 		expect(sanitizeSubject('a'.repeat(80))).toBe('a'.repeat(72));
 	});
+
+	test('strips periods after truncating', () => {
+		expect(sanitizeSubject(`${'a'.repeat(71)}. more details`)).toBe('a'.repeat(71));
+	});
 });
 
 describe('fallbackSubject', () => {
