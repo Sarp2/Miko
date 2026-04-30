@@ -5,7 +5,7 @@ export function spawnDetached(command: string, args: string[]) {
 }
 
 export function hasCommand(command: string) {
-	const result = spawnSync('sh', ['-lc', `command -v ${command}`], { stdio: 'ignore' });
+	const result = spawnSync('sh', ['-lc', 'command -v "$1"', 'sh', command], { stdio: 'ignore' });
 	return result.status === 0;
 }
 

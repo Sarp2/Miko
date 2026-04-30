@@ -30,6 +30,17 @@ describe('hasCommand', () => {
 	test('returns false for a missing command', () => {
 		expect(hasCommand('definitely-not-a-real-command-xyz')).toBe(false);
 	});
+
+	test('does not execute injected shell metacharacters', () => {
+		const dir = mkdtempSync(path.join(tmpdir(), 'has-command-'));
+		const marker = path.join(dir, 'pwned');
+		try {
+			expect(hasCommand(`x; touch ${marker}`)).toBe(false);
+			expect(existsSync(marker)).toBe(false);
+		} finally {
+			rmSync(dir, { recursive: true, force: true });
+		}
+	});
 });
 
 describe.skipIf(process.platform !== 'darwin')('canOpenMacApp', () => {
