@@ -1,0 +1,27 @@
+src/server/terminal-manager.test.ts
+  f99a4b5bd910d7b5 1-728
+src/shared/protocol.ts
+  f99a4b5bd910d7b5 39
+src/server/terminal-manager.ts
+  f99a4b5bd910d7b5 1-367
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.4",
+  "base_commit_sha": "3db96f47e52c51cbff679d7e85a23b024cc12d75",
+  "prompts": {
+    "f99a4b5bd910d7b5": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019de258-b54c-7ae3-adfe-8e25584a25b3",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Sarp",
+      "messages": [],
+      "total_additions": 1363,
+      "total_deletions": 267,
+      "accepted_lines": 1096,
+      "overriden_lines": 0
+    }
+  }
+}
