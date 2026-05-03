@@ -151,7 +151,7 @@ export function normalizeKeybindings(
 
 		if (normalized.length === 0) {
 			bindings[action] = [...DEFAULT_KEYBINDINGS[action]];
-			if (rawValue.length > 0 || source[action] !== undefined) {
+			if (rawValue.length > 0) {
 				warnings.push(`${action} did not contain any valid shortcut strings`);
 			}
 			continue;

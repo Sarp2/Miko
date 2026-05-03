@@ -243,6 +243,16 @@ describe('normalizeKeybindings', () => {
 			'Some keybindings were reset to defaults: toggleEmbeddedTerminal did not contain any valid shortcut strings',
 		);
 	});
+
+	test('allows empty shortcut arrays to reset without warning', () => {
+		const snapshot = normalizeKeybindings({ toggleEmbeddedTerminal: [] }, '/tmp/keybindings.json');
+
+		expect(snapshot.bindings.toggleEmbeddedTerminal).toEqual(
+			DEFAULT_KEYBINDINGS.toggleEmbeddedTerminal,
+		);
+
+		expect(snapshot.warning).toBeNull();
+	});
 });
 
 describe('formatDisplayPath', () => {
