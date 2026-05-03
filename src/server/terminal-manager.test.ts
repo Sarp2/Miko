@@ -449,6 +449,7 @@ describe('TerminalManager.createTerminal', () => {
 		} as unknown as typeof Bun.Terminal;
 
 		const spawn = spyOn(Bun, 'spawn').mockImplementation(() => subprocess);
+		const kill = spyOn(process, 'kill').mockImplementation(() => true);
 
 		try {
 			const snapshot = manager.createTerminal({
@@ -478,9 +479,10 @@ describe('TerminalManager.createTerminal', () => {
 
 			expect(spawn).toHaveBeenCalled();
 		} finally {
+			manager.closeAll();
+			kill.mockRestore();
 			spawn.mockRestore();
 			restoreBunTerminalMocks();
-			manager.closeAll();
 		}
 	});
 });
