@@ -646,7 +646,7 @@ describe('AgentCoordinator.cancel', () => {
 		let stateChanges = 0;
 		let interruptCalls = 0;
 		let closeCalls = 0;
-		let pendingResolved = false;
+		let pendingResolved: unknown = null;
 
 		const coordinator = createCoordinator({
 			store,
@@ -661,8 +661,8 @@ describe('AgentCoordinator.cancel', () => {
 			pendingTool: {
 				toolUseId: 'tool-1',
 				tool: { toolKind: 'ask_user_question' },
-				resolve: () => {
-					pendingResolved = true;
+				resolve: (value: unknown) => {
+					pendingResolved = value;
 				},
 			},
 			cancelRequested: false,
@@ -686,7 +686,7 @@ describe('AgentCoordinator.cancel', () => {
 		expect(stateChanges).toBe(1);
 
 		expect(coordinator.activeTurns.has('chat-1')).toBe(false);
-		expect(pendingResolved).toBe(false);
+		expect(pendingResolved).toEqual({ discarded: true, answers: {} });
 
 		expect(appended.map((entry) => entry.kind)).toEqual(['tool_result', 'interrupted']);
 		expect(appended[0]).toMatchObject({

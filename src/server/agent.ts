@@ -1222,10 +1222,7 @@ export class AgentCoordinator {
 					content: result,
 				}),
 			);
-
-			if (active.provider === 'codex' && pendingTool.tool.toolKind === 'exit_plan_mode') {
-				pendingTool.resolve(result);
-			}
+			pendingTool.resolve(result);
 		}
 
 		await this.store.appendMessage(chatId, timestamped({ kind: 'interrupted' }));
