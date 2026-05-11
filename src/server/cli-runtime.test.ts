@@ -181,6 +181,21 @@ describe('parseArgs', () => {
 		});
 	});
 
+	test('--port must be an integer in TCP range', () => {
+		expect(() => parseArgs(['--port', 'abc'])).toThrow(
+			'Invalid value for --port: abc. Expected an integer between 1 and 65535.',
+		);
+		expect(() => parseArgs(['--port', '0'])).toThrow(
+			'Invalid value for --port: 0. Expected an integer between 1 and 65535.',
+		);
+		expect(() => parseArgs(['--port', '65536'])).toThrow(
+			'Invalid value for --port: 65536. Expected an integer between 1 and 65535.',
+		);
+		expect(() => parseArgs(['--port', '12.5'])).toThrow(
+			'Invalid value for --port: 12.5. Expected an integer between 1 and 65535.',
+		);
+	});
+
 	test('--host without a value throws', () => {
 		expect(() => parseArgs(['--host'])).toThrow('Missing value for --host');
 		expect(() => parseArgs(['--host', '--no-open'])).toThrow('Missing value for --host');
