@@ -350,6 +350,7 @@ export function openUrl(url: string) {
 export async function fetchLatestPackageVersion(packageName: string) {
 	const response = await fetch(
 		`https://registry.npmjs.org/${encodeURIComponent(packageName)}/latest`,
+		{ signal: AbortSignal.timeout(5_000) },
 	);
 
 	if (!response.ok) {

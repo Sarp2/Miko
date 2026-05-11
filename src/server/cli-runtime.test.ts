@@ -441,11 +441,15 @@ describe('fetchLatestPackageVersion', () => {
 	});
 
 	test('returns version when registry responds with a valid payload', async () => {
-		spyOn(globalThis, 'fetch').mockResolvedValue(
+		const fetchSpy = spyOn(globalThis, 'fetch').mockResolvedValue(
 			Response.json({ version: '2.3.4' }) as unknown as Response,
 		);
 
 		await expect(fetchLatestPackageVersion('miko-code')).resolves.toBe('2.3.4');
+		expect(fetchSpy).toHaveBeenCalledWith(
+			'https://registry.npmjs.org/miko-code/latest',
+			expect.objectContaining({ signal: expect.any(AbortSignal) }),
+		);
 	});
 
 	test('throws when registry returns a non-ok status', async () => {
