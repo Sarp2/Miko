@@ -263,7 +263,9 @@ describe('startClaudeSession', () => {
 			permissionMode: 'plan',
 		});
 
-		const promptIterator = stub.calls[0]!.prompt[Symbol.asyncIterator]();
+		const firstCall = stub.calls[0];
+		if (!firstCall) throw new Error('Expected query to be invoked once');
+		const promptIterator = firstCall.prompt[Symbol.asyncIterator]();
 		await session.sendPrompt('hello');
 		const sent = await promptIterator.next();
 

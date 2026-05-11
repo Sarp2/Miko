@@ -119,14 +119,14 @@ export function parseArgs(argv: string[]): ParsedArgs {
 		if (arg === '--port') {
 			const next = argv[index + 1];
 			if (!next) throw new Error('Missing value for --port');
-			
+
 			const parsedPort = Number(next);
 			if (!Number.isInteger(parsedPort) || parsedPort < 1 || parsedPort > 65_535) {
 				throw new Error(
 					`Invalid value for --port: ${next}. Expected an integer between 1 and 65535.`,
 				);
 			}
-			
+
 			port = parsedPort;
 			index += 1;
 			continue;
