@@ -1,0 +1,21 @@
+src/server/cli-supervisor.test.ts
+  s_54d91db3a37ea6::t_5337e6cf6bcd48 69-74
+src/server/cli-supervisor.ts
+  s_54d91db3a37ea6::t_5337e6cf6bcd48 46,74,78-80
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.4",
+  "base_commit_sha": "05a34a5b353c3df9419189b71f3c1c4da6f8b10e",
+  "prompts": {},
+  "sessions": {
+    "s_54d91db3a37ea6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e16a4-ef07-7f00-8163-c3c8b8fb990f",
+        "model": "gpt-5.3-codex"
+      },
+      "human_author": "Sarp <sarppehlivan444@gmail.com>"
+    }
+  }
+}
