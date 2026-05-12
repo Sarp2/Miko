@@ -1,0 +1,19 @@
+src/server/update-manager.test.ts
+  s_6249bca8412a18::t_6826aaaee0c84d 180,210,269
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.4",
+  "base_commit_sha": "6f243405926c88471ebc3cee147eb9451bb70c45",
+  "prompts": {},
+  "sessions": {
+    "s_6249bca8412a18": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e17cc-9691-78a0-93e7-0e61a0f4bca8",
+        "model": "gpt-5.3-codex"
+      },
+      "human_author": "Sarp <sarppehlivan444@gmail.com>"
+    }
+  }
+}
