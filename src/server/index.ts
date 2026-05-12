@@ -50,8 +50,6 @@ export async function startServer(options: { port?: number; host?: string } = {}
 	return { port, stop: () => server.stop(true) };
 }
 
-startServer();
-
 async function serveStatic(distDir: string, pathname: string) {
 	const requestedPath = pathname === '/' ? 'index.html' : pathname;
 	const filePath = path.join(distDir, requestedPath);
