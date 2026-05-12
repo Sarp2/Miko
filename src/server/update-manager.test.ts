@@ -238,6 +238,30 @@ describe('UpdateManager.installUpdate', () => {
 		expect(snapshot.error).toBeNull();
 	});
 
+	test('returns ok=true after successful install when restart is pending', async () => {
+		const manager = createUpdateManager({
+			fetchLatestVersion: async () => '1.2.0',
+			installVersion: () => ({
+				ok: true,
+				errorCode: null,
+				userTitle: null,
+				userMessage: null,
+			}),
+		});
+
+		const firstResult = await manager.installUpdate();
+		const secondResult = await manager.installUpdate();
+
+		expect(firstResult.ok).toBe(true);
+		expect(secondResult).toEqual({
+			ok: true,
+			action: 'restart',
+			errorCode: null,
+			userTitle: null,
+			userMessage: null,
+		});
+	});
+
 	test('surfaces install errors and updates snapshot error state', async () => {
 		const manager = createUpdateManager({
 			fetchLatestVersion: async () => '1.2.0',
@@ -261,6 +285,40 @@ describe('UpdateManager.installUpdate', () => {
 		});
 		expect(snapshot.status).toBe('error');
 		expect(snapshot.error).toBe('Permission denied');
+	});
+
+	test('during updating state, reentrant installUpdate callers await the in-flight result', async () => {
+		let reentrantCalls = 0;
+		const reentrantDeferred = createDeferred<unknown>();
+		const manager = createUpdateManager({
+			fetchLatestVersion: async () => '1.2.0',
+			installVersion: () => ({
+				ok: false,
+				errorCode: 'install_failed',
+				userTitle: 'Update failed',
+				userMessage: 'Install crashed',
+			}),
+		});
+
+		manager.onChange((snapshot) => {
+			if (snapshot.status === 'updating' && reentrantCalls === 0) {
+				reentrantCalls += 1;
+				void manager.installUpdate().then(reentrantDeferred.resolve, reentrantDeferred.reject);
+			}
+		});
+
+		const resolvedFirst = await manager.installUpdate();
+		const resolvedReentrant = await reentrantDeferred.promise;
+
+		expect(reentrantCalls).toBe(1);
+		expect(resolvedFirst).toEqual({
+			ok: false,
+			action: 'restart',
+			errorCode: 'install_failed',
+			userTitle: 'Update failed',
+			userMessage: 'Install crashed',
+		});
+		expect(resolvedReentrant).toEqual(resolvedFirst);
 	});
 
 	test('reuses in-flight install promise for concurrent callers', async () => {

@@ -105,9 +105,13 @@ export class UpdateManager {
 			};
 		}
 
-		if (this.snapshot.status === 'updating' || this.snapshot.status === 'restart_pending') {
+		if (this.installPromise) {
+			return this.installPromise;
+		}
+
+		if (this.snapshot.status === 'restart_pending') {
 			return {
-				ok: this.snapshot.updateAvailable,
+				ok: true,
 				action: 'restart',
 				errorCode: null,
 				userTitle: null,
@@ -115,8 +119,14 @@ export class UpdateManager {
 			};
 		}
 
-		if (this.installPromise) {
-			return this.installPromise;
+		if (this.snapshot.status === 'updating') {
+			return {
+				ok: false,
+				action: 'restart',
+				errorCode: null,
+				userTitle: null,
+				userMessage: null,
+			};
 		}
 
 		const installPromise = this.runInstall();
