@@ -177,7 +177,7 @@ describe('UpdateManager.installUpdate', () => {
 			userTitle: null,
 			userMessage: null,
 		});
-		
+
 		expect(statuses).toEqual(['updating', 'restart_pending']);
 		expect(snapshot.status).toBe('restart_pending');
 		expect(snapshot.updateAvailable).toBe(false);
@@ -207,7 +207,7 @@ describe('UpdateManager.installUpdate', () => {
 			userTitle: null,
 			userMessage: null,
 		});
-		
+
 		expect(installCalls).toBe(0);
 		expect(manager.getSnapshot().status).toBe('up_to_date');
 	});
@@ -266,7 +266,7 @@ describe('UpdateManager.installUpdate', () => {
 	test('reuses in-flight install promise for concurrent callers', async () => {
 		let fetchCalls = 0;
 		let installCalls = 0;
-		
+
 		const latestVersionDeferred = createDeferred<string>();
 		const manager = createUpdateManager({
 			fetchLatestVersion: () => {
