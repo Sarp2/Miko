@@ -304,6 +304,19 @@ describe('handleAttachmentContent', () => {
 		expect(await response?.json()).toEqual({ error: 'Invalid attachment path' });
 	});
 
+	test('returns 400 for malformed URL-encoded attachment paths', async () => {
+		const req = createAttachmentContentRequest({
+			url: 'http://localhost/api/projects/project-1/uploads/%E0%A4%A/content',
+		});
+		const response = await handleAttachmentContent(
+			req,
+			new URL(req.url),
+			createStore({ id: 'project-1', localPath: '/tmp/project-1' }),
+		);
+		expect(response?.status).toBe(400);
+		expect(await response?.json()).toEqual({ error: 'Invalid attachment path' });
+	});
+
 	test('returns 404 when attachment file is missing', async () => {
 		const localPath = await mkdtemp(path.join(tmpdir(), 'miko-server-'));
 		try {
@@ -401,6 +414,19 @@ describe('handleProjectFileContent', () => {
 	test('returns 400 for invalid project file paths', async () => {
 		const req = createProjectFileContentRequest({
 			url: 'http://localhost/api/projects/project-1/files/..%2Fsecret.txt/content',
+		});
+		const response = await handleProjectFileContent(
+			req,
+			new URL(req.url),
+			createStore({ id: 'project-1', localPath: '/tmp/project-1' }),
+		);
+		expect(response?.status).toBe(400);
+		expect(await response?.json()).toEqual({ error: 'Invalid project file path' });
+	});
+
+	test('returns 400 for malformed URL-encoded project file paths', async () => {
+		const req = createProjectFileContentRequest({
+			url: 'http://localhost/api/projects/project-1/files/%E0%A4%A/content',
 		});
 		const response = await handleProjectFileContent(
 			req,
@@ -518,6 +544,19 @@ describe('handleProjectUploadDelete', () => {
 			createStore({ id: 'project-1', localPath: '/tmp/project-1' }),
 		);
 
+		expect(response?.status).toBe(400);
+		expect(await response?.json()).toEqual({ error: 'Invalid attachment path' });
+	});
+
+	test('returns 400 for malformed URL-encoded attachment paths', async () => {
+		const req = createUploadDeleteRequest({
+			url: 'http://localhost/api/projects/project-1/uploads/%E0%A4%A',
+		});
+		const response = await handleProjectUploadDelete(
+			req,
+			new URL(req.url),
+			createStore({ id: 'project-1', localPath: '/tmp/project-1' }),
+		);
 		expect(response?.status).toBe(400);
 		expect(await response?.json()).toEqual({ error: 'Invalid attachment path' });
 	});

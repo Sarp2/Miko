@@ -24,6 +24,14 @@ const MAX_UPLOAD_FILES = 50;
 const MAX_UPLOAD_SIZE_BYTES = 100 * 1024 * 1024;
 const STALE_EMPTY_CHAT_PRUNE_INTERVAL_MS = 60 * 1000;
 
+function safeDecodePathSegment(segment: string): string | null {
+	try {
+		return decodeURIComponent(segment);
+	} catch {
+		return null;
+	}
+}
+
 export async function persistUploadedFiles(args: {
 	projectId: string;
 	localPath: string;
@@ -303,7 +311,7 @@ export async function handleAttachmentContent(req: Request, url: URL, store: Eve
 		return Response.json({ error: 'Project not found' }, { status: 404 });
 	}
 
-	const storedName = decodeURIComponent(match[2]);
+	const storedName = safeDecodePathSegment(match[2]);
 	if (
 		!storedName ||
 		storedName.includes('/') ||
@@ -353,7 +361,12 @@ export async function handleProjectFileContent(req: Request, url: URL, store: Ev
 		return Response.json({ error: 'Project not found' }, { status: 404 });
 	}
 
-	const relativePath = path.posix.normalize(decodeURIComponent(match[2]).replaceAll('\\', '/'));
+	const decodedPathSegment = safeDecodePathSegment(match[2]);
+	if (!decodedPathSegment) {
+		return Response.json({ error: 'Invalid project file path' }, { status: 400 });
+	}
+
+	const relativePath = path.posix.normalize(decodedPathSegment.replaceAll('\\', '/'));
 	if (
 		!relativePath ||
 		relativePath === '.' ||
@@ -403,7 +416,7 @@ export async function handleProjectUploadDelete(req: Request, url: URL, store: E
 		return Response.json({ error: 'Project not found' }, { status: 404 });
 	}
 
-	const storedName = decodeURIComponent(match[2]);
+	const storedName = safeDecodePathSegment(match[2]);
 	if (
 		!storedName ||
 		storedName.includes('/') ||
