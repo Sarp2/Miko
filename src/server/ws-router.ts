@@ -733,7 +733,7 @@ export function createWsRouter({
 			let parsed: unknown;
 			try {
 				parsed = JSON.parse(String(raw));
-			} catch (error) {
+			} catch {
 				send(ws, { type: 'error', message: 'Invalid JSON' });
 				return;
 			}

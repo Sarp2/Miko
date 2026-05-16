@@ -189,7 +189,7 @@ describe('createWsRouter', () => {
 					},
 				},
 			});
-			
+
 			const ws = new FakeWebSocket();
 
 			await router.handleMessage(
@@ -306,7 +306,6 @@ describe('createWsRouter', () => {
 
 			expect(ws.sent).toEqual([{ type: 'ack', id: 'close-1' }]);
 		});
-
 	});
 
 	describe('createWsRouter.pushTerminalEvent', () => {
@@ -335,7 +334,6 @@ describe('createWsRouter', () => {
 				},
 			]);
 		});
-
 	});
 
 	describe('createWsRouter.disposeKeybindingEvents', () => {
@@ -615,7 +613,7 @@ describe('createWsRouter', () => {
 					topic: { type: 'local-projects' },
 				}),
 			);
-			
+
 			await Bun.sleep(0);
 
 			expect(refreshed).toBe(true);
