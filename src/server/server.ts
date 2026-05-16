@@ -125,7 +125,7 @@ export async function startServer(options: StartServerOptions = {}) {
 		machineDisplayName,
 		updateManager,
 	});
-	
+
 	const staleEmptyChatPruneInterval = setInterval(() => {
 		void router.broadcastSnapshots();
 	}, STALE_EMPTY_CHAT_PRUNE_INTERVAL_MS);
@@ -198,11 +198,11 @@ export async function startServer(options: StartServerOptions = {}) {
 				err instanceof Error &&
 				'code' in err &&
 				(err as NodeJS.ErrnoException).code === 'EADDRINUSE';
-			
+
 			if (!isAddrInUse || strictPort || attempt === MAX_PORT_ATTEMPTS - 1) {
 				throw err;
 			}
-			
+
 			console.log(`Port ${actualPort} is in use, trying ${actualPort + 1}...`);
 			actualPort++;
 		}
@@ -213,7 +213,7 @@ export async function startServer(options: StartServerOptions = {}) {
 		for (const chatId of [...agent.activeTurns.keys()]) {
 			await agent.cancel(chatId);
 		}
-		
+
 		router.dispose();
 		keybindings.dispose();
 		terminals.closeAll();

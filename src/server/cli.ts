@@ -1,7 +1,7 @@
 import process from 'node:process';
 import { LOG_PREFIX } from '../shared/branding';
 import { fetchLatestPackageVersion, installPackageVersion, openUrl, runCli } from './cli-runtime';
-import { startServer } from './index';
+import { startServer } from './server';
 import { CLI_STARTUP_UPDATE_RESTART_EXIT_CODE, CLI_UI_UPDATE_RESTART_EXIT_CODE } from './restart';
 
 // Read version from package.json at the package root.
